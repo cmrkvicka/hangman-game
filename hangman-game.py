@@ -1,32 +1,50 @@
 print('--------------START SCRIPT--------------')
 
 import pandas as pd
+import getpass
 
 
 print('Welcome to my Hangman game!\n')
 print('Guess one letter at a time, you get 6 mistakes before the game is over!\n')
-print('If you want to end early, type \'quit\' and press enter')
+print('If you want to end early, type \'quit\' and press enter\n\n')
 
 
 mystery_phrase = 'KANGAROO'
+only_letters = False
+
+while only_letters == False:
+    mystery_phrase = getpass.getpass("Input the secret word you want player 2 to guess: \n\n").upper()
+    mystery_phrase = mystery_phrase.split(' ')
+    for word in mystery_phrase:
+        if word.isalpha():
+            only_letters = True
+        else:
+            print('Please only type letters and spaces!\n\n')
+            only_letters = False
+
+    #fix if first word contains numbers
+
+print(mystery_phrase)
 
 blanks = ''
 mistakes = 0
+mystery_phrase_dict = {}
 
-for letter in mystery_phrase:
-    blanks = blanks + '_ '
+for word in mystery_phrase:
+    for letter in word:
+        blanks = blanks + '_ '
+        mystery_phrase_dict[letter] = False
+    blanks = blanks + '    '
 
 print(blanks)
 
+
+# for letter in mystery_phrase:
+    # mystery_phrase_dict[letter] = False
+
+print(mystery_phrase_dict)
+
 user_phrase = ''
-
-mystery_phrase_dict = {}
-
-for letter in mystery_phrase:
-    mystery_phrase_dict[letter] = False
-
-# print(mystery_phrase_dict)
-
 user_guess = 'CCC'
 
 revealed_phrase = ''
@@ -59,11 +77,13 @@ while True:
         
         revealed_phrase = ''
 
-        for letter in mystery_phrase:
-            if mystery_phrase_dict.get(letter) == True:
-                revealed_phrase = revealed_phrase + letter + ' '
-            else:
-                revealed_phrase = revealed_phrase + '_ '
+        for word in mystery_phrase:
+            for letter in word:
+                if mystery_phrase_dict.get(letter) == True:
+                    revealed_phrase = revealed_phrase + letter + ' '
+                else:
+                    revealed_phrase = revealed_phrase + '_ '
+            revealed_phrase = revealed_phrase + '  '
         print(revealed_phrase + '\n\n')
     # If the guess is not in the mystery phrase
     else:
